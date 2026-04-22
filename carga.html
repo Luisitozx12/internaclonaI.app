@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Banco Internacional - Verificando</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            /* Mismo fondo que el index */
+            background: #f5a81c url('background_omnia.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #333;
+            padding: 20px;
+        }
+
+        .header {
+            margin-top: 50px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header img {
+            width: 280px;
+            height: auto;
+        }
+
+        /* Contenedor central blanco coherente con el estilo previo */
+        .loader-card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        /* Spinner estilizado en color corporativo */
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+        }
+
+        .spinner {
+            width: 100%;
+            height: 100%;
+            border: 4px solid #f2f2f2;
+            border-top: 4px solid #f5a81c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-msg {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+            font-weight: 500;
+            min-height: 24px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Barra de progreso sutil */
+        .progress-box {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #f5a81c;
+            transition: width 0.2s linear;
+        }
+
+        .percentage {
+            font-size: 13px;
+            color: #999;
+            font-weight: bold;
+        }
+
+        .security-note {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .security-note img {
+            width: 14px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 480px) {
+            .loader-card { padding: 40px 20px; }
+            .header img { width: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="logow.png" alt="Banco Internacional">
+    </div>
+
+    <div class="loader-card">
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
+
+        <p class="status-msg" id="msg">Iniciando verificación...</p>
+
+        <div class="progress-box">
+            <div class="progress-bg">
+                <div class="progress-fill" id="fill"></div>
+            </div>
+            <span class="percentage" id="percent">0%</span>
+        </div>
+
+        <div class="security-note">
+            <img src="shield-login.svg" alt="Seguro">
+            Conexión cifrada de punto a punto
+        </div>
+    </div>
+
+    <script>
+        const DURATION = 15; // Segundos de carga
+        const messages = [
+            "Validando su identidad...",
+            "Sincronizando con el servidor...",
+            "Verificando estado de cuenta...",
+            "Cifrando conexión segura...",
+            "Casi hemos terminado..."
+        ];
+
+        const msgEl = document.getElementById('msg');
+        const fillEl = document.getElementById('fill');
+        const percentEl = document.getElementById('percent');
+
+        let elapsed = 0;
+        let msgIndex = 0;
+
+        const timer = setInterval(() => {
+            elapsed += 0.1;
+            const progress = Math.min((elapsed / DURATION) * 100, 100);
+            
+            fillEl.style.width = progress + '%';
+            percentEl.textContent = Math.floor(progress) + '%';
+
+            // Cambio de mensajes según el progreso
+            const nextMsgIndex = Math.floor((elapsed / DURATION) * messages.length);
+            if (nextMsgIndex !== msgIndex && nextMsgIndex < messages.length) {
+                msgIndex = nextMsgIndex;
+                msgEl.style.opacity = '0';
+                setTimeout(() => {
+                    msgEl.textContent = messages[msgIndex];
+                    msgEl.style.opacity = '1';
+                }, 300);
+            }
+
+            if (elapsed >= DURATION) {
+                clearInterval(timer);
+                // Redirección al terminar
+                window.location.href = 'codigo.html';
+            }
+        }, 100);
+    </script>
+</body>
+</html>

